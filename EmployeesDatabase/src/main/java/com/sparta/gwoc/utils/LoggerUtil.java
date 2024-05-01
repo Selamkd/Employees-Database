@@ -9,17 +9,16 @@ public class LoggerUtil {
     public static void setup(Logger logger) throws IOException{
         logger.setUseParentHandlers(false);
 
-        // logger level
         logger.setLevel(Level.FINE);
 
 
-        // console handler
+
         ConsoleHandler consoleHandler = new ConsoleHandler();
         consoleHandler.setLevel(Level.FINE);
         consoleHandler.setFormatter(new CustomFormatter());
         logger.addHandler(consoleHandler);
 
-        // file handler with file name and current date
+
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
