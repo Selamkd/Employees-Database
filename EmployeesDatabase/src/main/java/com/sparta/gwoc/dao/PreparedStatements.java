@@ -1,4 +1,6 @@
 package com.sparta.gwoc.dao;
 
-public class PreparedStatements {
+public interface PreparedStatements {
+    String GET_ALL_EMPLOYEES = "SELECT * FROM employees";
+
 }
