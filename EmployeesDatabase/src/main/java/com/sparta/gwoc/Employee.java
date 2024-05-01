@@ -18,16 +18,4 @@ public record Employee(int empID, String prefix, String firstName, char middleIn
                 "Date of Join: " + dateOfJoin + "\n" +
                 "Salary: " + salary + "\n";
     }
-
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return empID == employee.empID;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(empID);
-    }
 }
