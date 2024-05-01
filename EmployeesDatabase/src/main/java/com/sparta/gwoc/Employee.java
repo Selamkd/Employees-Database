@@ -1,7 +1,6 @@
 package com.sparta.gwoc;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public record Employee(int empID, String prefix, String firstName, char middleInitial, String lastName,
                        char gender, String email, LocalDate dateOfBirth, LocalDate dateOfJoin, int salary) {
