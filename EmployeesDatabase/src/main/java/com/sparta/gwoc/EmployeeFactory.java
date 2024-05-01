@@ -14,13 +14,16 @@ public class EmployeeFactory {
     public static ArrayList<Employee> getValidEmployees(){
 
         ArrayList<Employee> validEmployees = new ArrayList<>();
+        ArrayList<String> invalidEmployees = new ArrayList<>();
         Path path = null;
 
-        try(Stream<String> lines = Files.lines(
-                Paths.get(Objects.requireNonNull(EmployeeFactory.class.getClassLoader().getResource("employees-corrupted.csv")).toURI())))
-        {
-            lines.forEach(line ->{
-
+        try(Stream<String> employees = Files.lines(Paths.get(Objects.requireNonNull(EmployeeFactory.class.getClassLoader().getResource("employees-corrupted.csv")).toURI()))) {
+            employees.forEach(employee -> {
+                if(Validator.isValidEmployee(employee)){
+                    validEmployees.add(EmployeeParser.convertStringToEmployee(employee));
+                }else{
+                    invalidEmployees.add(employee);
+                }
             });
 
         } catch (IOException | URISyntaxException e) {
@@ -30,7 +33,5 @@ public class EmployeeFactory {
         return validEmployees;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getValidEmployees());
-    }
+
 }
