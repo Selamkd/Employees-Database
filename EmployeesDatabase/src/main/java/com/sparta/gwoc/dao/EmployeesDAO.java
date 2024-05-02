@@ -1,6 +1,7 @@
 package com.sparta.gwoc.dao;
 
 import com.sparta.gwoc.dto.Employee;
+import com.sparta.gwoc.dto.EmployeeFactory;
 import com.sparta.gwoc.utils.LoggerUtil;
 
 import java.sql.*;
@@ -26,7 +27,7 @@ public class EmployeesDAO implements DAOInterface {
 
         try (Statement statement = dbConnection.createStatement();
              ResultSet resultSet = statement.executeQuery(PreparedStatements.GET_ALL_EMPLOYEES)) {
-            logger.fine("Executing statement: " + statement);
+            logger.fine("Executing statement: " + PreparedStatements.GET_ALL_EMPLOYEES);
             while (resultSet.next()) {
                 Employee employee = resultSetToEmployee(resultSet);
                 employeeList.add(employee);
@@ -151,7 +152,7 @@ public class EmployeesDAO implements DAOInterface {
 
         try (Statement statement = dbConnection.createStatement();
              ResultSet resultSet = statement.executeQuery(PreparedStatements.GET_COUNT_OF_ALL_EMPLOYEES)) {
-            logger.fine("Executing query: " + statement);
+            logger.fine("Executing query: " + PreparedStatements.GET_COUNT_OF_ALL_EMPLOYEES);
             while (resultSet.next()) {
                 totalCount = resultSet.getInt(1);
             }
@@ -173,22 +174,33 @@ public class EmployeesDAO implements DAOInterface {
     }
 
 
-
+    /*
+     * This method is using for manual testing of the EmployeeDAO class in the absence
+     * of automated integration testing.
+     */
     public static void main(String[] args) throws SQLException {
         EmployeesDAO dao = new EmployeesDAO();
         dao.openDBConnection();
-        List<Employee> employees = dao.getAllEmployeeRecords();
-        Employee manish = dao.getEmployeeRecordByID("111111");
+        List<Employee> employees = EmployeeFactory.getValidEmployees();
+        dao.insertEmployees(employees);
+
+        // Attempting to get and delete non-existent IDs does not crash the program
         dao.getEmployeeRecordByID("000001");
         dao.deleteEmployeeRecordByID("000001");
-//        Employee bob = new Employee("333334", "Mr.", "Bob", 'B', "Brown", 'M',
-//                "bob@bob.com", LocalDate.now(), LocalDate.now(), 30000);
-//        int inserted = dao.insertEmployees(List.of(bob));
-//        System.out.println(inserted + " records inserted");
+
+        // Verify update changes Raymundo -> Raymond
+        dao.updateFirstNameById("191728", "Raymond");
+        Employee raymond = dao.getEmployeeRecordByID("191728");
+        System.out.println(raymond);
+
+        // Number of employees should be 9911 (verified by querying database directly)
+        System.out.println("Number of employees: " + dao.countTheNumberOfEmployees());
+
+        // Deleting an existing record decreases the count by one
+        dao.deleteEmployeeRecordByID("111498");
+        System.out.println("Number of employees after deleting one record: " + dao.countTheNumberOfEmployees());
 
         dao.closeDBConnection();
-        System.out.println(employees);
-        System.out.println(manish);
 
     }
 
