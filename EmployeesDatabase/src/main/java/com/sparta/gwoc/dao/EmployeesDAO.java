@@ -11,13 +11,11 @@ import java.util.logging.Logger;
 
 public class EmployeesDAO implements DAOInterface {
     private static Connection dbConnection;
-    private static PreparedStatements preparedStatements;
-    private static ResultSet resultSet;
-    private final Logger logger = Logger.getLogger(EmployeesDAO.class.getName());
+    private static final Logger logger = Logger.getLogger(EmployeesDAO.class.getName());
 
-    
-
-
+    static {
+            LoggerUtil.setup(logger);
+    }
 
     @Override
     public void openDBConnection() {
@@ -39,14 +37,14 @@ public class EmployeesDAO implements DAOInterface {
                 employeeList.add(employee);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return employeeList;
     }
 
 
     private Employee resultSetToEmployee(ResultSet resultSet) throws SQLException {
-        Employee employee = new Employee(
+        return new Employee(
                 resultSet.getString(1),
                 resultSet.getString(2),
                 resultSet.getString(3),
@@ -58,7 +56,6 @@ public class EmployeesDAO implements DAOInterface {
                 resultSet.getDate(9).toLocalDate(),
                 resultSet.getInt(10)
         );
-        return employee;
     }
 
 
@@ -74,7 +71,7 @@ public class EmployeesDAO implements DAOInterface {
                 employee = resultSetToEmployee(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return employee;
     }
@@ -85,11 +82,10 @@ public class EmployeesDAO implements DAOInterface {
         int recordsUpdated = 0;
         try (PreparedStatement preparedStatements = dbConnection.prepareStatement(PreparedStatements.DELETE_EMPLOYEE_BY_ID)) {
             preparedStatements.setString(1, id);
-            System.out.println(resultSet);
             recordsUpdated = preparedStatements.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return recordsUpdated;
     }
@@ -104,7 +100,7 @@ public class EmployeesDAO implements DAOInterface {
                 recordsInserted += preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return recordsInserted;
     }
@@ -131,7 +127,7 @@ public class EmployeesDAO implements DAOInterface {
             preparedStatement.setString(2, id);
             rowsAffected = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return rowsAffected;
     }
@@ -147,7 +143,7 @@ public class EmployeesDAO implements DAOInterface {
                 totalCount = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
         }
         return totalCount;
 }
@@ -156,11 +152,16 @@ public class EmployeesDAO implements DAOInterface {
     public void closeDBConnection() {
         try {
             dbConnection.close();
+            logger.info("Database connection closed successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warning("Unable to close database connection."
+                            + logSQLException(e));
         }
     }
 
+    private String logSQLException(SQLException e) {
+        return " Error " + e.getErrorCode() + " " + e.getMessage();
+    }
 
     public static void main(String[] args) throws SQLException {
         EmployeesDAO dao = new EmployeesDAO();
