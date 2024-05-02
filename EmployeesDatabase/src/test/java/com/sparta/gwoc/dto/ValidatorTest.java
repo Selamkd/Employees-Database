@@ -14,14 +14,9 @@ import static org.hamcrest.Matchers.*;
 
 public class ValidatorTest {
 
-    @BeforeEach
-    void setup(){
-
-    }
-
 
     @Nested
-    class ValidIDTests{
+    class ValidIDTests {
         @ParameterizedTest
         @ValueSource(strings = {"00005", "0004", "003", "02", "1"})
         @DisplayName("when an id shorter than 6 gets given returns false")
@@ -50,25 +45,32 @@ public class ValidatorTest {
     }
 
     @Nested
-    class ValidGenderTests{
+    class ValidGenderTests {
         @ParameterizedTest
-        @ValueSource(strings={"X", "A","Q","D", "g", "5", "f", "m", "Fm", "Mm", "Ds"})
+        @ValueSource(strings = {"X", "A", "Q", "D", "g", "5", "f", "m", "Fm", "Mm", "Ds"})
         @DisplayName("when gender other than F or M return false")
-        void whenGenderIsAnyOtherThanFemaleOrMaleReturnFalse(String gender){
+        void whenGenderIsAnyOtherThanFemaleOrMaleReturnFalse(String gender) {
             assertThat(false, equalTo(Validator.isValidGender(gender)));
         }
 
         @Test
         @DisplayName("when gender if F should return true")
-        void whenGenderIsFemaleShouldReturnTrue(){
+        void whenGenderIsFemaleShouldReturnTrue() {
             assertThat(true, equalTo(Validator.isValidGender("F")));
         }
-         }
 
+        @Test
+        @DisplayName("when gender if M should return true")
+        void whenGenderIsMaleShouldReturnTrue() {
+            assertThat(true, equalTo(Validator.isValidGender("F")));
+        }
+
+
+    }
 
 
     @Nested
-    class ValidCharacterTests{
+    class ValidCharacterTests {
         @ParameterizedTest
         @ValueSource(strings = {"ABABABA", "AB"})
         @DisplayName("given a string greater than 1 character is given, isValidCharacter returns false")
@@ -97,11 +99,11 @@ public class ValidatorTest {
     }
 
     @Nested
-    class ValidEmailTests{
+    class ValidEmailTests {
         @Test
         @DisplayName("given an email has all components, isValidEmail returns true")
         void givenAnEmailHasAllComponentsIsValidEmailReturnsTrue() {
-            //assertThat(true, is(equalTo(Validator.isValidEmail("example15@example.co.uk"))));
+
             assertThat(Validator.isValidEmail("ex.Am-pl!e15@example.co.uk"), equalTo(true));
         }
 
@@ -112,11 +114,11 @@ public class ValidatorTest {
             assertThat(false, equalTo(Validator.isValidEmail(email)));
         }
 
-        
+
     }
-    
+
     @Nested
-    class ValidStringTests{
+    class ValidStringTests {
         @Test
         @DisplayName("given a string has characters other than letters in it, isValidString returns false")
         void givenAStringHasCharactersOtherThanLettersInItIsValidStringReturnsFalse() {
@@ -129,6 +131,58 @@ public class ValidatorTest {
             assertThat(false, equalTo(Validator.isValidString(null)));
         }
 
+        @Test
+        @DisplayName("given a string has only letters in it, isValidString returns true")
+        void givenAStringOnlyHasLettersInItIsValidStringReturnsFalse() {
+            assertThat(false, equalTo(Validator.isValidString("ValidName")));
+        }
+
+        @Test
+        @DisplayName("given a string contains whitespace, isValidString returns false")
+        void givenAStringContainsWhitespaceIsValidStringReturnsFalse() {
+            assertThat(false, equalTo(Validator.isValidString("Invalid Name")));
+        }
+
     }
 
+    @Nested
+    class ValidPrefixTests {
+        @Test
+        @DisplayName("given a prefix contains anything other than letters, isValidPrefix returns false")
+        void givenAPrefixContainsAnythingOtherThanLettersIsValidPrefixReturnsFalse() {
+            assertThat(Validator.isValidPrefix("M!55."), equalTo(false));
+        }
+
+        @Test
+        @DisplayName("given a prefix contains anything other than letters, isValidPrefix returns false")
+        void givenAPrefixContainsOnlyLettersAndIsValid_IsValidPrefixReturnsFalse() {
+            assertThat(Validator.isValidPrefix("M!55."), equalTo(false));
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"Dr.", "Mrs.", "Hon.", "Mr.", "Ms", "Drs", "Prof."})
+        @DisplayName("given a prefix contains no numbers and is Valid, isValidPrefix returns false")
+        void givenAPrefixContainsNoNumbersAndIsValid_isValidPrefixReturnsTrue(String validPrefixes){
+            assertThat(Validator.isValidPrefix(validPrefixes), equalTo(true));
+        }
+    }
+
+
+    @Nested
+    class ValidSalaryTests {
+        @Test
+        @DisplayName("given a negative integer should return false")
+        void givenANegativeIntegerShouldReturnFalse() {
+            assertThat(Validator.isValidSalary("-666666"), equalTo(false));
+
+        }
+
+        @Test
+        @DisplayName("given a positive integer should return true")
+        void givenAPositiveIntegerShouldReturnTrue() {
+            assertThat(Validator.isValidSalary("6666666"), equalTo(true));
+
+        }
+
+    }
 }
