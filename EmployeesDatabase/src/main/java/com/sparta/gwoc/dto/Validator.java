@@ -18,9 +18,9 @@ public class Validator {
                 && isValidSalary(fields[9]);
     }
 
+    // EmployeeID can start with 0
     private static boolean isValidEmployeeID(String empID){
-        Integer id = convertStringToInteger(empID);
-        return id != null && id < 1000000 && id > 99999;
+        return empID != null && empID.length() == 6;
     }
 
     private static boolean isValidGender(String gender){
