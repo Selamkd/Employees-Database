@@ -17,7 +17,7 @@ public class EmployeeFactory {
         ArrayList<String> invalidEmployees = new ArrayList<>();
         Path path = null;
 
-        try(Stream<String> employees = Files.lines(Paths.get(Objects.requireNonNull(EmployeeFactory.class.getClassLoader().getResource("employees-corrupted.csv")).toURI()))) {
+        try(Stream<String> employees = Files.lines(Paths.get(Objects.requireNonNull(EmployeeFactory.class.getClassLoader().getResource("employees-corrupted.csv")).toURI())).skip(1)) {
             employees.forEach(employee -> {
                 if(Validator.isValidEmployee(employee)){
                     validEmployees.add(EmployeeParser.convertStringToEmployee(employee));
@@ -29,8 +29,13 @@ public class EmployeeFactory {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
+        System.out.println(invalidEmployees);
 
         return validEmployees;
+    }
+
+    public static void main(String[] args) {
+        getValidEmployees();
     }
 
 
