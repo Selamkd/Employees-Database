@@ -6,11 +6,8 @@ import java.util.logging.Logger;
 public class TestLogger {
     public static void main(String[] args) {
      final Logger LOGGER = Logger.getLogger(TestLogger.class.getName());
-        try {
+
             LoggerUtil.setup(LOGGER);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         LOGGER.severe("This is a severe message.");
         LOGGER.warning("This is a warning message.");

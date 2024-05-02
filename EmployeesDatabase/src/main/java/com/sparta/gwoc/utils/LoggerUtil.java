@@ -6,11 +6,10 @@ import java.io.IOException;
 
 public class LoggerUtil {
 
-    public static void setup(Logger logger) throws IOException{
+    public static void setup(Logger logger) {
         logger.setUseParentHandlers(false);
 
         logger.setLevel(Level.FINE);
-
 
 
         ConsoleHandler consoleHandler = new ConsoleHandler();
@@ -25,7 +24,12 @@ public class LoggerUtil {
         String logDirectory = "src/main/resources/";
 
         String logFileName = logDirectory + "log__" + currentDate.format(formatter) + "__log";
-        FileHandler fileHandler = new FileHandler(logFileName);
+        FileHandler fileHandler = null;
+        try {
+            fileHandler = new FileHandler(logFileName);
+        } catch (IOException e) {
+            System.out.println("FileHandler could not access log file");
+        }
 
         SimpleFormatter formatterTxt = new SimpleFormatter();
         fileHandler.setFormatter(formatterTxt);
