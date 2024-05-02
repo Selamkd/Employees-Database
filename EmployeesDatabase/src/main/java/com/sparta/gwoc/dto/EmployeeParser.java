@@ -10,7 +10,7 @@ public class EmployeeParser {
         String[] parts = employeeRecord.split(",");
 
         return new Employee(
-                Integer.parseInt(parts[0]),                  // empID
+                parts[0],                  // empID
                 parts[1],                                    // prefix
                 parts[2],                                    // firstName
                 parts[3].charAt(0),                          // middleInitial

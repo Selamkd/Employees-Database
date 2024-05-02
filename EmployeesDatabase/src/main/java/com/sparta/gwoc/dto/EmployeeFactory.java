@@ -29,7 +29,10 @@ public class EmployeeFactory {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-        System.out.println(invalidEmployees);
+        for(String employee : invalidEmployees){
+            System.out.println(employee);
+        }
+        System.out.println(invalidEmployees.size());
 
         return validEmployees;
     }

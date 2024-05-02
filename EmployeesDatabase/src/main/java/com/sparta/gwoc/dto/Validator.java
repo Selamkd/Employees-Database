@@ -2,6 +2,8 @@ package com.sparta.gwoc.dto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Validator {
 
@@ -64,7 +66,7 @@ public class Validator {
     }
 
     private static LocalDate getLocalDateFromString(String date){
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("mm/dd/yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
         return LocalDate.parse(date, dateTimeFormatter);
     }
 

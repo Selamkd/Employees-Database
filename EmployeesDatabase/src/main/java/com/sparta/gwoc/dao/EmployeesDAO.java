@@ -27,7 +27,7 @@ public class EmployeesDAO {
         System.out.println(resultSet);
         while (resultSet.next()) {
             Employee employee = new Employee(
-                    resultSet.getInt(1),
+                    resultSet.getString(1),
                     resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getString(4).charAt(0),
