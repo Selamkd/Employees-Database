@@ -37,4 +37,10 @@ public class LoggerUtil {
         logger.addHandler(fileHandler);
 
     }
+
+    public static Logger getLogger(String className) {
+        Logger logger = Logger.getLogger(className);
+        setup(logger);
+        return logger;
+    }
 }

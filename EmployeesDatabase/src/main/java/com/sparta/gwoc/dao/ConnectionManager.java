@@ -11,11 +11,7 @@ public class ConnectionManager implements DatabaseConnection {
 
     private Connection connection;
     private final DatabaseProperties properties;
-    private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
-
-    static {
-        LoggerUtil.setup(logger);
-    }
+    private static final Logger logger = LoggerUtil.getLogger(ConnectionManager.class.getName());
 
     public ConnectionManager(DatabaseProperties properties) {
      this.properties = properties;

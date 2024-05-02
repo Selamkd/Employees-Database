@@ -4,18 +4,13 @@ import com.sparta.gwoc.dto.Employee;
 import com.sparta.gwoc.utils.LoggerUtil;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class EmployeesDAO implements DAOInterface {
     public static Connection dbConnection;
-    private static final Logger logger = Logger.getLogger(EmployeesDAO.class.getName());
-
-    static {
-            LoggerUtil.setup(logger);
-    }
+    private static final Logger logger = LoggerUtil.getLogger(EmployeesDAO.class.getName());
 
     @Override
     public void openDBConnection() {
