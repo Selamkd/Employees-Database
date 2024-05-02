@@ -1,4 +1,4 @@
-package com.sparta.gwoc;
+package com.sparta.gwoc.dto;
 
 import java.time.LocalDate;
 

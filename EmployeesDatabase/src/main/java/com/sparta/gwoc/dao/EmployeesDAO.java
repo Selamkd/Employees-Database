@@ -1,6 +1,6 @@
 package com.sparta.gwoc.dao;
 
-import com.sparta.gwoc.Employee;
+import com.sparta.gwoc.dto.Employee;
 
 import java.sql.*;
 import java.util.ArrayList;
