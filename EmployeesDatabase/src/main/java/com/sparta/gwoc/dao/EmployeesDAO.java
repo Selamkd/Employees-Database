@@ -96,8 +96,8 @@ public class EmployeesDAO implements DAOInterface {
         try (PreparedStatement preparedStatement = dbConnection.prepareStatement(PreparedStatements.INSERT_EMPLOYEES)) {
             for (Employee employee : employeeList) {
                 prepareInsertStatement(employee, preparedStatement);
-                logger.fine("Executing query: " + preparedStatement);
-                recordsInserted += preparedStatement.executeUpdate();
+                logger.finer("Executing query: " + preparedStatement);
+                recordsInserted += attemptInsert(preparedStatement);
             }
         } catch (SQLException e) {
             logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
@@ -117,6 +117,16 @@ public class EmployeesDAO implements DAOInterface {
         preparedStatement.setDate(8, Date.valueOf(employee.dateOfBirth()));
         preparedStatement.setDate(9, Date.valueOf(employee.dateOfJoin()));
         preparedStatement.setInt(10, employee.salary());
+    }
+
+    private int attemptInsert(PreparedStatement preparedStatement) {
+        int rowsAffected = 0;
+        try {
+            rowsAffected = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logger.warning("Failed to insert record" + DAOLoggingUtils.logSQLException(e));
+        }
+        return rowsAffected;
     }
 
 
