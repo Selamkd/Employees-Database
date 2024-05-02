@@ -36,6 +36,5 @@ public class LoggerUtil {
 
         logger.addHandler(fileHandler);
 
-        logger.setLevel(Level.INFO);
     }
 }

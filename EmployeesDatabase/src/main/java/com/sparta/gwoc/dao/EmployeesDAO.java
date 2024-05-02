@@ -31,14 +31,15 @@ public class EmployeesDAO implements DAOInterface {
 
         try (Statement statement = dbConnection.createStatement();
              ResultSet resultSet = statement.executeQuery(PreparedStatements.GET_ALL_EMPLOYEES)) {
-            System.out.println(resultSet);
+            logger.fine("Executing statement: " + statement);
             while (resultSet.next()) {
                 Employee employee = resultSetToEmployee(resultSet);
                 employeeList.add(employee);
             }
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
+        logger.fine("Retrieved records for " + employeeList.size() + " employees");
         return employeeList;
     }
 
@@ -65,14 +66,15 @@ public class EmployeesDAO implements DAOInterface {
 
         try (PreparedStatement preparedStatement = dbConnection.prepareStatement(PreparedStatements.GET_EMPLOYEE_BY_ID)) {
             preparedStatement.setString(1, id);
+            logger.fine("Executing query: " + preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
             if (resultSet.next()) {
                 employee = resultSetToEmployee(resultSet);
             }
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
+        logger.fine("Employee found: " + (employee == null ? "no employee found" : employee.empID()));
         return employee;
     }
 
@@ -82,11 +84,13 @@ public class EmployeesDAO implements DAOInterface {
         int recordsUpdated = 0;
         try (PreparedStatement preparedStatements = dbConnection.prepareStatement(PreparedStatements.DELETE_EMPLOYEE_BY_ID)) {
             preparedStatements.setString(1, id);
+            logger.fine("Executing query: " + preparedStatements);
             recordsUpdated = preparedStatements.executeUpdate();
 
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
+        logger.fine("Deleted " + recordsUpdated + " employee records.");
         return recordsUpdated;
     }
 
@@ -97,11 +101,13 @@ public class EmployeesDAO implements DAOInterface {
         try (PreparedStatement preparedStatement = dbConnection.prepareStatement(PreparedStatements.INSERT_EMPLOYEES)) {
             for (Employee employee : employeeList) {
                 prepareInsertStatement(employee, preparedStatement);
+                logger.fine("Executing query: " + preparedStatement);
                 recordsInserted += preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
+        logger.fine("Inserted " + recordsInserted + " employee records.");
         return recordsInserted;
     }
 
@@ -125,10 +131,12 @@ public class EmployeesDAO implements DAOInterface {
         try (PreparedStatement preparedStatement = dbConnection.prepareStatement(PreparedStatements.UPDATE_FIRSTNAME_BY_ID)) {
             preparedStatement.setString(1, newFirstName);
             preparedStatement.setString(2, id);
+            logger.fine("Executing query: " + preparedStatement);
             rowsAffected = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
+        logger.fine("Updated " + rowsAffected + " employee records.");
         return rowsAffected;
     }
 
@@ -138,12 +146,12 @@ public class EmployeesDAO implements DAOInterface {
 
         try (Statement statement = dbConnection.createStatement();
              ResultSet resultSet = statement.executeQuery(PreparedStatements.GET_COUNT_OF_ALL_EMPLOYEES)) {
-
+            logger.fine("Executing query: " + statement);
             while (resultSet.next()) {
                 totalCount = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            logger.warning("SQL Statement Execution Failed" + logSQLException(e));
+            logger.warning("SQL Statement Execution Failed" + DAOLoggingUtils.logSQLException(e));
         }
         return totalCount;
 }
@@ -155,24 +163,23 @@ public class EmployeesDAO implements DAOInterface {
             logger.info("Database connection closed successfully.");
         } catch (SQLException e) {
             logger.warning("Unable to close database connection."
-                            + logSQLException(e));
+                            + DAOLoggingUtils.logSQLException(e));
         }
     }
 
-    private String logSQLException(SQLException e) {
-        return " Error " + e.getErrorCode() + " " + e.getMessage();
-    }
+
 
     public static void main(String[] args) throws SQLException {
         EmployeesDAO dao = new EmployeesDAO();
         dao.openDBConnection();
         List<Employee> employees = dao.getAllEmployeeRecords();
         Employee manish = dao.getEmployeeRecordByID("111111");
-
-        Employee bob = new Employee("333334", "Mr.", "Bob", 'B', "Brown", 'M',
-                "bob@bob.com", LocalDate.now(), LocalDate.now(), 30000);
-        int inserted = dao.insertEmployees(List.of(bob));
-        System.out.println(inserted + " records inserted");
+        dao.getEmployeeRecordByID("000001");
+        dao.deleteEmployeeRecordByID("000001");
+//        Employee bob = new Employee("333334", "Mr.", "Bob", 'B', "Brown", 'M',
+//                "bob@bob.com", LocalDate.now(), LocalDate.now(), 30000);
+//        int inserted = dao.insertEmployees(List.of(bob));
+//        System.out.println(inserted + " records inserted");
 
         dao.closeDBConnection();
         System.out.println(employees);
