@@ -1,20 +1,30 @@
 package com.sparta.gwoc.dao;
 
+import com.sparta.gwoc.utils.LoggerUtil;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public record DatabaseProperties(String url, String username, String password) {
+
+    private static final Logger logger = Logger.getLogger(DatabaseProperties.class.getName());
+
+    static {
+        LoggerUtil.setup(logger);
+    }
 
     public static DatabaseProperties loadPropertiesFromFile() {
         Properties properties = new Properties();
         try {
+            logger.info("Attempting to read properties from file: ");
             properties.load(new FileReader("src/main/resources/database.properties"));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.severe("Cannot find file. " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Error reading from file. " + e.getMessage());
         }
 
         String url = properties.getProperty("url");
