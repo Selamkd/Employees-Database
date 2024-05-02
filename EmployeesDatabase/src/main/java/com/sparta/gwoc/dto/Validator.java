@@ -26,7 +26,7 @@ public class Validator {
     }
 
     // EmployeeID can start with 0
-    private static boolean isValidEmployeeID(String empID){
+    public static boolean isValidEmployeeID(String empID){
         if(empID != null && empID.length() == 6){
             LOGGER.fine("Valid ID");
             return true;
@@ -35,7 +35,7 @@ public class Validator {
         return false;
     }
 
-    private static boolean isValidGender(String gender){
+    public static boolean isValidGender(String gender){
         if(gender.equals("M") || gender.equals("F")){
             LOGGER.fine("Valid gender");
             return true;
@@ -44,7 +44,7 @@ public class Validator {
         return false;
     }
 
-    private static boolean isValidCharacter(String character){
+    public static boolean isValidCharacter(String character){
         if(character != null &&  character.matches("[A-Z]")){
             LOGGER.fine("Valid character");
             return true;
@@ -53,12 +53,8 @@ public class Validator {
         return false;
     }
 
-    private static boolean isValidEmail(String email){
-        if(email != null && email.matches(
-                        "^[A-Za-z]+(\\.[A-Za-z]+)*" + // Matches local part
-                        "@" + // Matches @
-                        "[A-Za-z]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$" // Matches Domain
-        )){
+    public static boolean isValidEmail(String email){
+        if(email != null && email.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")){
             LOGGER.fine("Valid email");
             return true;
         }
@@ -66,7 +62,7 @@ public class Validator {
         return false;
     }
 
-    private static boolean isValidString(String string){
+    public static boolean isValidString(String string){
         if(string != null && string.matches("^[A-Za-z]+")){
             LOGGER.fine("Valid name");
             return true;
@@ -75,7 +71,7 @@ public class Validator {
         return false;
     }
 
-    private static boolean isValidPrefix(String prefix){
+    public static boolean isValidPrefix(String prefix){
         if(validPrefix.contains(prefix)){
             LOGGER.fine("Valid prefix");
             return true;
@@ -88,7 +84,7 @@ public class Validator {
         return date != null && date.matches("[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}");
     }
 
-    private static boolean isValidDate(String birthDate, String joinDate){
+    public static boolean isValidDate(String birthDate, String joinDate){
         if(!(isValidDateFormat((birthDate)))){
             LOGGER.fine("Birth date: " + birthDate + "\nIs an invalid birth date");
             return false;
@@ -123,7 +119,7 @@ public class Validator {
         return LocalDate.parse(date, dateTimeFormatter);
     }
 
-    private static boolean isValidSalary(String empSalary){
+    public static boolean isValidSalary(String empSalary){
         Integer salary = convertStringToInteger(empSalary);
         if(salary == null){
             LOGGER.info("Salary must be a number");
