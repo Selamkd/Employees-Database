@@ -21,40 +21,39 @@ public class Validator {
     }
 
     // EmployeeID can start with 0
-    private static boolean isValidEmployeeID(String empID){
-        return empID != null && empID.length() == 6;
+    public static boolean isValidEmployeeID(String empID){
+        return empID != null && empID.length() == 6 && empID.matches("^[0-9]{6}$");
     }
 
-    private static boolean isValidGender(String gender){
+    public static boolean isValidGender(String gender){
         return gender.equals("M") || gender.equals("F");
     }
 
-    private static boolean isValidCharacter(String character){
+    public static boolean isValidCharacter(String character){
         return character.matches("[A-Z]");
     }
 
-    private static boolean isValidEmail(String email){
+    public static boolean isValidEmail(String email){
         return email != null
-                && email.matches(
-                        "^[A-Za-z]+(\\.[A-Za-z]+)*" + // Matches local part
+                && email.matches("^[a-zA-Z][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*" + // Matches local part
                         "@" + // Matches @
-                        "[A-Za-z]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$" // Matches Domain
+                        "[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" // Matches domain
                 );
     }
 
-    private static boolean isValidString(String string){
+    public static boolean isValidString(String string){
         return string != null && string.matches("^[A-Za-z]+");
     }
 
-    private static boolean isValidPrefix(String prefix){
+    public static boolean isValidPrefix(String prefix){
         return prefix != null && prefix.matches("^[A-Za-z]+[.]");
     }
 
-    private static boolean isValidDateFormat(String date){
+    public static boolean isValidDateFormat(String date){
         return date != null && date.matches("[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}");
     }
 
-    private static boolean isValidDate(String birthDate, String joinDate){
+    public static boolean isValidDate(String birthDate, String joinDate){
         if(!(isValidDateFormat(birthDate) && isValidDateFormat(joinDate))){
             return false;
         }
@@ -70,7 +69,7 @@ public class Validator {
         return LocalDate.parse(date, dateTimeFormatter);
     }
 
-    private static boolean isValidSalary(String empSalary){
+    public static boolean isValidSalary(String empSalary){
         Integer salary = convertStringToInteger(empSalary);
         return salary != null && salary > 0;
     }
@@ -84,4 +83,8 @@ public class Validator {
         }
         return integer;
     }
+
+
+
+
 }
