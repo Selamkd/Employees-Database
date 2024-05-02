@@ -11,6 +11,7 @@ public interface DAOInterface {
     int deleteEmployeeRecordByID(String id);
     int insertEmployees(List<Employee> employeeList);
     int updateFirstNameById(String id, String newFirstName);
+    int countTheNumberOfEmployees();
 
     // start the connection to database
     void openDBConnection();
