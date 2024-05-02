@@ -2,10 +2,15 @@ package com.sparta.gwoc.dto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
+    static final Logger LOGGER = Logger.getLogger(Validator.class.getName());
+    static final ArrayList<String> validPrefix = new ArrayList<>(Arrays.asList("Dr.", "Mrs.", "Hon.", "Mr.", "Ms.", "Drs.", "Prof."));
 
     public static boolean isValidEmployee(String employee){
         String[] fields = employee.split(",");
@@ -21,47 +26,96 @@ public class Validator {
     }
 
     // EmployeeID can start with 0
-    public static boolean isValidEmployeeID(String empID){
-        return empID != null && empID.length() == 6 && empID.matches("^[0-9]{6}$");
+    private static boolean isValidEmployeeID(String empID){
+        if(empID != null && empID.length() == 6){
+            LOGGER.fine("Valid ID");
+            return true;
+        }
+        LOGGER.fine("EmployeeID: " + empID + "\nIs an invalid ID, ID must be of length 6");
+        return false;
     }
 
-    public static boolean isValidGender(String gender){
-        return gender.equals("M") || gender.equals("F");
+    private static boolean isValidGender(String gender){
+        if(gender.equals("M") || gender.equals("F")){
+            LOGGER.fine("Valid gender");
+            return true;
+        }
+        LOGGER.fine("Gender: " + gender + "\nIs an invalid gender, gender must be either M or F");
+        return false;
     }
 
-    public static boolean isValidCharacter(String character){
-        return character.matches("[A-Z]");
+    private static boolean isValidCharacter(String character){
+        if(character != null &&  character.matches("[A-Z]")){
+            LOGGER.fine("Valid character");
+            return true;
+        }
+        LOGGER.fine("Middle initial: " + character + "\nIs an invalid middle initial, middle initial must be a single capital alphabetical letter");
+        return false;
     }
 
-    public static boolean isValidEmail(String email){
-        return email != null
-                && email.matches("^[a-zA-Z][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*" + // Matches local part
+    private static boolean isValidEmail(String email){
+        if(email != null && email.matches(
+                        "^[A-Za-z]+(\\.[A-Za-z]+)*" + // Matches local part
                         "@" + // Matches @
-                        "[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" // Matches domain
-                );
+                        "[A-Za-z]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$" // Matches Domain
+        )){
+            LOGGER.fine("Valid email");
+            return true;
+        }
+        LOGGER.fine("Email: " + email + "\nIs an invalid email, email must be in format xxxxx@xxxxx.xxx");
+        return false;
     }
 
-    public static boolean isValidString(String string){
-        return string != null && string.matches("^[A-Za-z]+");
+    private static boolean isValidString(String string){
+        if(string != null && string.matches("^[A-Za-z]+")){
+            LOGGER.fine("Valid name");
+            return true;
+        }
+        LOGGER.fine("First/Last name: " + string + "\nIs an invalid name, name must only contain alphabetical letter");
+        return false;
     }
 
-    public static boolean isValidPrefix(String prefix){
-        return prefix != null && prefix.matches("^[A-Za-z]+[.]");
+    private static boolean isValidPrefix(String prefix){
+        if(validPrefix.contains(prefix)){
+            LOGGER.fine("Valid prefix");
+            return true;
+        }
+        LOGGER.fine("Prefix: " + prefix + "\nIs an invalid prefix, current valid prefix are " + validPrefix);
+        return false;
     }
 
-    public static boolean isValidDateFormat(String date){
+    private static boolean isValidDateFormat(String date){
         return date != null && date.matches("[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}");
     }
 
-    public static boolean isValidDate(String birthDate, String joinDate){
-        if(!(isValidDateFormat(birthDate) && isValidDateFormat(joinDate))){
+    private static boolean isValidDate(String birthDate, String joinDate){
+        if(!(isValidDateFormat((birthDate)))){
+            LOGGER.fine("Birth date: " + birthDate + "\nIs an invalid birth date");
+            return false;
+        }
+        if(!(isValidDateFormat(joinDate))){
+            LOGGER.fine("Join date: " + joinDate + "\nIs an invalid join date");
             return false;
         }
         
         LocalDate dateOfBirth = getLocalDateFromString(birthDate);
         LocalDate dateOfJoining = getLocalDateFromString(joinDate);
-        
-        return dateOfBirth.isBefore(dateOfJoining);
+
+        if(dateOfBirth.isAfter(dateOfJoining)){
+            LOGGER.fine("Date of birth can not be after date of joining" +
+                    "Date of birth: " + dateOfBirth + "\n" +
+                    "Date of join: " + dateOfJoining);
+            return false;
+        }
+
+        if(dateOfJoining.isAfter(LocalDate.now())){
+            LOGGER.fine("Date of joining can not be in the future" +
+                    "Date of join: " + dateOfJoining + "\n" +
+                    "Current date: " +LocalDate.now());
+            return false;
+        }
+        LOGGER.fine("Valid dates");
+        return true;
     }
 
     private static LocalDate getLocalDateFromString(String date){
@@ -69,9 +123,18 @@ public class Validator {
         return LocalDate.parse(date, dateTimeFormatter);
     }
 
-    public static boolean isValidSalary(String empSalary){
+    private static boolean isValidSalary(String empSalary){
         Integer salary = convertStringToInteger(empSalary);
-        return salary != null && salary > 0;
+        if(salary == null){
+            LOGGER.info("Salary must be a number");
+            return false;
+        }
+        if(salary < 0){
+            LOGGER.info("Salary: " + salary + "\nSalary can't be negative");
+            return false;
+        }
+        LOGGER.fine("Valid Salary");
+        return true;
     }
     
     private static Integer convertStringToInteger(String str){
@@ -79,12 +142,9 @@ public class Validator {
         try{
             integer = Integer.parseInt(str);
         }catch(NumberFormatException e){
-            e.printStackTrace();
+            LOGGER.fine("Can not convert to integer" +
+                    "\n" + str + " is not a number");
         }
         return integer;
     }
-
-
-
-
 }
