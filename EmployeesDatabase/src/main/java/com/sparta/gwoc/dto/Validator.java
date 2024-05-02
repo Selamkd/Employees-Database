@@ -54,7 +54,9 @@ public class Validator {
     }
 
     public static boolean isValidEmail(String email){
-        if(email != null && email.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")){
+        if(email != null && email.matches("^[A-Za-z]+([A-Za-z0-9.-]+)*" //First part of email
+                    + "@" // Matches @
+                    + "[A-Za-z]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")){ // Matches Domain
             LOGGER.fine("Valid email");
             return true;
         }
@@ -122,11 +124,11 @@ public class Validator {
     public static boolean isValidSalary(String empSalary){
         Integer salary = convertStringToInteger(empSalary);
         if(salary == null){
-            LOGGER.info("Salary must be a number");
+            LOGGER.fine("Salary must be a number");
             return false;
         }
         if(salary < 0){
-            LOGGER.info("Salary: " + salary + "\nSalary can't be negative");
+            LOGGER.fine("Salary: " + salary + "\nSalary can't be negative");
             return false;
         }
         LOGGER.fine("Valid Salary");

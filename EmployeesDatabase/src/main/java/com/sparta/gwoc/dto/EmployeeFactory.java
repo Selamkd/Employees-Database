@@ -44,4 +44,8 @@ public class EmployeeFactory {
 
         return validEmployees;
     }
+
+    public static void main(String[] args) {
+        getValidEmployees();
+    }
 }

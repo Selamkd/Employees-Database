@@ -129,7 +129,6 @@ public class ValidatorTest {
             assertThat(false, equalTo(Validator.isValidString(null)));
         }
 
-
     }
 
 }
