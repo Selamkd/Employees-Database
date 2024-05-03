@@ -36,6 +36,11 @@ public class LoggerUtil {
 
         logger.addHandler(fileHandler);
 
-        logger.setLevel(Level.INFO);
+    }
+
+    public static Logger getLogger(String className) {
+        Logger logger = Logger.getLogger(className);
+        setup(logger);
+        return logger;
     }
 }
