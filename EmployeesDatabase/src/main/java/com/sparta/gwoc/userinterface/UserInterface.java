@@ -70,6 +70,12 @@ public class UserInterface implements DAOInterface {
         return rowsAffected;
    }
 
+
+    @Override
+    public int countTheNumberOfEmployees() {
+        return employeesDAO.countTheNumberOfEmployees();
+    }
+
    public void loadValidatedEmployeeData() {
         List<Employee> employees =EmployeeFactory.getValidEmployees();
         insertEmployees(employees);
