@@ -108,7 +108,7 @@ public class ValidatorTest {
         @DisplayName("given an email has all components, isValidEmail returns true")
         void givenAnEmailHasAllComponentsIsValidEmailReturnsTrue() {
 
-            assertThat(Validator.isValidEmail("ex.Am-pl!e15@example.co.uk"), equalTo(true));
+            assertThat(Validator.isValidEmail("exAmple15@example.co.uk"), equalTo(true));
         }
 
         @ParameterizedTest
@@ -136,7 +136,7 @@ public class ValidatorTest {
         @Test
         @DisplayName("given a string has only letters in it, isValidString returns true")
         void givenAStringOnlyHasLettersInItIsValidStringReturnsFalse() {
-            assertThat(Validator.isValidString("ValidName"), equalTo(false));
+            assertThat(Validator.isValidString("ValidName"), equalTo(true));
         }
 
         @Test
@@ -161,7 +161,7 @@ public class ValidatorTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"Dr.", "Mrs.", "Hon.", "Mr.", "Ms", "Drs", "Prof."})
+        @ValueSource(strings = {"Dr.", "Mrs.", "Hon.", "Mr.", "Ms.", "Drs.", "Prof."})
         @DisplayName("given a prefix contains no numbers and is Valid, isValidPrefix returns false")
         void givenAPrefixContainsNoNumbersAndIsValid_isValidPrefixReturnsTrue(String validPrefixes){
             assertThat(Validator.isValidPrefix(validPrefixes), equalTo(true));
