@@ -26,15 +26,16 @@ public class ConnectionManagerTests {
     @DisplayName("When connection manager creates a connection, the connection is valid")
     void whenConnectionManagerCreatesAConnectionTheConnectionIsValid() throws SQLException {
         Connection connection = connectionManager.getConnection();
-        assertThat(true, equalTo(connection.isValid(5)));
+        assertThat(connection.isValid(5), is(true));
     }
 
     @Test
     @DisplayName("When connection manager creates a connection, the connection url matches the properties url")
     void whenConnectionManagerCreatesAConnectionTheConnectionUrlMatchesThePropertiesUrl() throws SQLException {
         Connection connection = connectionManager.getConnection();
+        String expectedUrl = "jdbc:mysql://localhost/employee_schema";
         String url = connection.getMetaData().getURL();
-        assertThat("jdbc:mysql://localhost/employee_schema", is(equalTo(url)));
+        assertThat(url, is(equalTo(expectedUrl)));
     }
 
     @Test
@@ -42,5 +43,13 @@ public class ConnectionManagerTests {
     void investigateSchema() throws SQLException {
         Connection connection = connectionManager.getConnection();
         String url = connection.getMetaData().getURL();
+    }
+
+    @Test
+    @DisplayName("When connection manager closes a connection, the connection is closed")
+    void whenConnectionManagerClosesAConnectionTheConnectionIsClosed() throws SQLException {
+        Connection connection = connectionManager.getConnection();
+        connectionManager.closeConnection();
+        assertThat(connection.isClosed(), is(true));
     }
 }

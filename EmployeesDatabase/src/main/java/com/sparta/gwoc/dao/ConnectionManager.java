@@ -11,11 +11,7 @@ public class ConnectionManager implements DatabaseConnection {
 
     private Connection connection;
     private final DatabaseProperties properties;
-    private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
-
-    static {
-        LoggerUtil.setup(logger);
-    }
+    private static final Logger logger = LoggerUtil.getLogger(ConnectionManager.class.getName());
 
     public ConnectionManager(DatabaseProperties properties) {
      this.properties = properties;
@@ -26,7 +22,7 @@ public class ConnectionManager implements DatabaseConnection {
             logger.info("Attempting to establish connection to database: " + properties.url());
             connection = DriverManager.getConnection(properties.url(), properties.username(), properties.password());
         } catch (SQLException e) {
-            logger.severe("Unable to establish connection");
+            logger.severe("Unable to establish connection" + DAOLoggingUtils.logSQLException(e));
             connection = null;
         }
     }
@@ -46,7 +42,7 @@ public class ConnectionManager implements DatabaseConnection {
                 logger.info("Attempting to close connection to database.");
                 connection.close();
             } catch (SQLException e) {
-                logger.severe("Unable to close database connection.");
+                logger.severe("Unable to close database connection." + DAOLoggingUtils.logSQLException(e));
             }
         }
     }

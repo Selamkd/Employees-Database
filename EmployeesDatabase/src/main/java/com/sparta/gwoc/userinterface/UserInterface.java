@@ -3,6 +3,7 @@ package com.sparta.gwoc.userinterface;
 import com.sparta.gwoc.dao.DAOInterface;
 import com.sparta.gwoc.dao.EmployeesDAO;
 import com.sparta.gwoc.dto.Employee;
+import com.sparta.gwoc.dto.EmployeeFactory;
 
 import java.util.List;
 
@@ -67,6 +68,11 @@ public class UserInterface implements DAOInterface {
         }
 
         return rowsAffected;
+   }
+
+   public void loadValidatedEmployeeData() {
+        List<Employee> employees =EmployeeFactory.getValidEmployees();
+        insertEmployees(employees);
    }
 
 }

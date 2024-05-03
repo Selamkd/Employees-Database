@@ -10,11 +10,7 @@ import java.util.logging.Logger;
 
 public record DatabaseProperties(String url, String username, String password) {
 
-    private static final Logger logger = Logger.getLogger(DatabaseProperties.class.getName());
-
-    static {
-        LoggerUtil.setup(logger);
-    }
+    private static final Logger logger = LoggerUtil.getLogger(DatabaseProperties.class.getName());
 
     public static DatabaseProperties loadPropertiesFromFile() {
         Properties properties = new Properties();
