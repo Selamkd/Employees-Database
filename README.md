@@ -27,14 +27,6 @@ Our application allows the user to query the data in the following ways:
 
 We aim to enhance the functionality of our queries by optimising our methods to retrieve data from our public records, ensuring quicker data retrieval.
 
-## How to Use the Project
-The full functionality of the application has not been totally made avaiable to the user in its current state.  
-Any of the DAO methods can be called within the App class, and these have been commented out.  Please feel free to uncomment these lines to experiement with the various methods that have been implemented.
-The initial command that must be run is ui.openDBConnection();  This ensures that the connection to the database is correctly established.
-The second command that must be run is ui.loadValidatedEmployeeData();  This ensures that the validated employee data is properly added to the database, ready to be manipulated.
-The final command that must be run is ui.closeDBConnection();  This ensures that the connection to the database is correctly closed.
-In the future, a more established user interface can be developed to cater to the client's requirements.
-
 ### Setup
 Ensure you have both Java and MySQL installed on your system.
 On the top-level directory of the repository, you will find a file named **schemaBuildScript.sql**.  This contains a list of SQL Queries that you should run to set up or reset your local database.
@@ -60,6 +52,13 @@ On the top-level directory of the repository, you will find a file named **schem
 7. **Wait for pull request to be merged:** After pushing your changes to your forked repository, create a pull request (PR) from your fork to the original repository. Wait for the project maintainers to review and merge your changes into the main project.
 
 By following these steps, you can effectively contribute to and collaborate on the project.
+
+## How to Use the Project  
+- Any of the DAO methods can be called within the App class, and these have been commented out.  Please feel free to uncomment these lines to experiement with the various methods that have been implemented.
+- The initial command that must be run is ui.openDBConnection();  This ensures that the connection to the database is correctly established.
+- The second command that must be run is ui.loadValidatedEmployeeData();  This ensures that the validated employee data is properly added to the database, ready to be manipulated.
+- The final command that must be run is ui.closeDBConnection();  This ensures that the connection to the database is correctly closed.
+- In the future, a more established user interface can be developed to cater to the client's requirements.
 
 📫 If you come across any bugs, please don't hesitate to open an issue to inform us. Additionally, we appreciate any suggestions for updates or improvements you may have!
 
