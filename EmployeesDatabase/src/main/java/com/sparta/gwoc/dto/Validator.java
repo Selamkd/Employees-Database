@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +28,7 @@ public class Validator {
 
     // EmployeeID can start with 0
     public static boolean isValidEmployeeID(String empID){
-        if(empID != null && empID.length() == 6){
+        if(empID != null && empID.matches("^[0-9]{6}$")){
             LOGGER.fine("Valid ID");
             return true;
         }
@@ -103,6 +104,11 @@ public class Validator {
             LOGGER.fine("Date of birth can not be after date of joining" +
                     "Date of birth: " + dateOfBirth + "\n" +
                     "Date of join: " + dateOfJoining);
+            return false;
+        }
+
+        if(dateOfBirth.isAfter(LocalDate.now())){
+            LOGGER.fine("Bad date of birth");
             return false;
         }
 
