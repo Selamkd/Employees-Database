@@ -3,8 +3,12 @@ package com.sparta.gwoc.userinterface;
 import com.sparta.gwoc.dao.DAOInterface;
 import com.sparta.gwoc.dao.EmployeesDAO;
 import com.sparta.gwoc.dto.Employee;
+import com.sparta.gwoc.utils.LoggerUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.sparta.gwoc.dto.EmployeeFactory.getValidEmployees;
 
 public class UserInterface implements DAOInterface {
 
@@ -33,10 +37,10 @@ public class UserInterface implements DAOInterface {
 
    public int deleteEmployeeRecordByID(String id){
         int rowsUpdated =  employeesDAO.deleteEmployeeRecordByID(id);
-        if(rowsUpdated > 0){
-            System.out.println("Employee with ID " + id + "deleted successfully.");
+        if(rowsUpdated == 0){
+            LoggerUtil.info("Employee with ID " + id + "  " + "deleted successfully.");
         }else{
-            System.out.println("No employee found with ID" + id);
+            LoggerUtil.info("No employee found with ID" + id);
         }
         return rowsUpdated;
    }
@@ -45,21 +49,26 @@ public class UserInterface implements DAOInterface {
    public int insertEmployees(List <Employee> employeeList){
         int rowsUpdated = employeesDAO.insertEmployees(employeeList);
         if(rowsUpdated > 0){
-            System.out.println("Employees inserted successfully.");
+            LoggerUtil.info("Employees inserted successfully.");
         }else{
-            System.out.println("Failed to insert employees.");
+           LoggerUtil.info("Failed to insert employees.");
         }
 
         return rowsUpdated;
    }
+    public int loadEmployees() {
+        ArrayList<Employee> validEmployees = getValidEmployees();
+        int rowsUpdated = insertEmployees(validEmployees);
+        return rowsUpdated;
+    }
 
    public int updateFirstNameById(String id, String newFirstName){
         int rowsAffected =  employeesDAO.updateFirstNameById(id,newFirstName);
 
         if(rowsAffected > 0){
-            System.out.println("Employee with ID " + id + "'s first name updated to " + newFirstName + ".");
+            LoggerUtil.info("Employee with ID " + id + "'s first name updated to " + newFirstName + ".");
         }else{
-            System.out.println("No employee found with ID" + id);
+            LoggerUtil.info("No employee found with ID" + id);
         }
 
         return rowsAffected;
