@@ -64,8 +64,6 @@ public class ValidatorTest {
         void whenGenderIsMaleShouldReturnTrue() {
             assertThat(true, equalTo(Validator.isValidGender("F")));
         }
-
-
     }
 
 
@@ -113,8 +111,6 @@ public class ValidatorTest {
         void givenAnEmailDontHaveAllComponentIsValidEmailReturnsFalse(String email) {
             assertThat(false, equalTo(Validator.isValidEmail(email)));
         }
-
-
     }
 
     @Nested
@@ -142,7 +138,6 @@ public class ValidatorTest {
         void givenAStringContainsWhitespaceIsValidStringReturnsFalse() {
             assertThat(false, equalTo(Validator.isValidString("Invalid Name")));
         }
-
     }
 
     @Nested
@@ -167,7 +162,6 @@ public class ValidatorTest {
         }
     }
 
-
     @Nested
     class ValidSalaryTests {
         @Test
@@ -183,6 +177,5 @@ public class ValidatorTest {
             assertThat(Validator.isValidSalary("6666666"), equalTo(true));
 
         }
-
     }
 }
