@@ -1,6 +1,5 @@
 package com.sparta.gwoc.dto;
 
-import com.sparta.gwoc.utils.TestLogger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -12,22 +11,30 @@ import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import static com.sparta.gwoc.dto.EmployeeParser.*;
+
 public class EmployeeFactory {
     static final Logger LOGGER = Logger.getLogger(EmployeeFactory.class.getName());
 
     public static ArrayList<Employee> getValidEmployees(){
         ArrayList<Employee> validEmployees = new ArrayList<>();
         ArrayList<Employee> invalidEmployees = new ArrayList<>();
+        ArrayList<Employee> duplicateEmployees = new ArrayList<>();
         Path path = null;
         LOGGER.info("Starting to go through employees-corrupted csv file");
         try(Stream<String> employees = Files.lines(Paths.get(Objects.requireNonNull(EmployeeFactory.class.getClassLoader().getResource("employees-corrupted.csv")).toURI())).skip(1)) {
             employees.forEach(employee -> {
-                if(Validator.isValidEmployee(employee)){
+
+                if(validEmployees.contains(convertStringToEmployee(employee))){
+                    duplicateEmployees.add(convertStringToEmployee(employee));
+                    validEmployees.remove(convertStringToEmployee(employee));
+                }
+                if(Validator.isValidEmployee(employee) && !duplicateEmployees.contains(convertStringToEmployee(employee))){
                     LOGGER.fine("Employee: " + employee + " is valid" );
-                    validEmployees.add(EmployeeParser.convertStringToEmployee(employee));
+                    validEmployees.add(convertStringToEmployee(employee));
                 }else{
                     LOGGER.fine("Employee: " + employee + " is invalid");
-                    invalidEmployees.add(EmployeeParser.convertStringToEmployee(employee));
+                    invalidEmployees.add(convertStringToEmployee(employee));
                 }
             });
 
@@ -38,14 +45,24 @@ public class EmployeeFactory {
 
         LOGGER.info("All invalid employees: "
                 + invalidEmployees
+                + "\nThe IDs of all duplicate employees: "
+                + getIDs(duplicateEmployees)
                 + "\nIn total "
-                + invalidEmployees.size()
-                + " employee are invalid");
-
+                + (invalidEmployees.size() - duplicateEmployees.size())
+                + " employees are invalid"
+                + " and " + duplicateEmployees.size()
+                + " employees are duplicates."
+                + "\nCurrently there are "
+                + validEmployees.size()
+                + " valid employees");
         return validEmployees;
     }
 
-    public static void main(String[] args) {
-        getValidEmployees();
+    private static ArrayList<String> getIDs(ArrayList<Employee> employees){
+        ArrayList<String> IDs = new ArrayList<>();
+        for(Employee employee : employees){
+            IDs.add(employee.empID());
+        }
+        return IDs;
     }
 }
