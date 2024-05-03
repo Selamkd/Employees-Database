@@ -49,9 +49,9 @@ public class EmployeeFactory {
                 + getIDs(duplicateEmployees)
                 + "\nIn total "
                 + (invalidEmployees.size() - duplicateEmployees.size())
-                + " employee are invalid"
+                + " employees are invalid"
                 + " and " + duplicateEmployees.size()
-                + " employee are duplicates."
+                + " employees are duplicates."
                 + "\nCurrently there are "
                 + validEmployees.size()
                 + " valid employees");
