@@ -42,10 +42,6 @@ public class UserInterface implements DAOInterface {
         return rowsUpdated;
    }
 
-   public int countTheNumberOfEmployees() {
-        return 0;
-   }
-
 
    public int insertEmployees(List <Employee> employeeList){
         int rowsUpdated = employeesDAO.insertEmployees(employeeList);
