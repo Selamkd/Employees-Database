@@ -65,5 +65,9 @@ public class UserInterface implements DAOInterface {
         return rowsAffected;
    }
 
+    @Override
+    public int countTheNumberOfEmployees() {
+        return employeesDAO.countTheNumberOfEmployees();
+    }
 }
 
