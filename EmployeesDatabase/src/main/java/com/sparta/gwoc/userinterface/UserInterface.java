@@ -37,7 +37,7 @@ public class UserInterface implements DAOInterface {
 
    public int deleteEmployeeRecordByID(String id){
         int rowsUpdated =  employeesDAO.deleteEmployeeRecordByID(id);
-        if(rowsUpdated == 0){
+        if(rowsUpdated > 0){
             LoggerUtil.info("Employee with ID " + id + "  " + "deleted successfully.");
         }else{
             LoggerUtil.info("No employee found with ID" + id);
