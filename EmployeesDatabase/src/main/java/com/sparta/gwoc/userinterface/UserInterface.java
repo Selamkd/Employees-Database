@@ -4,11 +4,14 @@ import com.sparta.gwoc.dao.DAOInterface;
 import com.sparta.gwoc.dao.EmployeesDAO;
 import com.sparta.gwoc.dto.Employee;
 import com.sparta.gwoc.dto.EmployeeFactory;
+import com.sparta.gwoc.utils.LoggerUtil;
+import com.sparta.gwoc.utils.TestLogger;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserInterface implements DAOInterface {
-
+    final Logger LOGGER = Logger.getLogger(UserInterface.class.getName());
    private EmployeesDAO employeesDAO;
 
 
@@ -35,9 +38,9 @@ public class UserInterface implements DAOInterface {
    public int deleteEmployeeRecordByID(String id){
         int rowsUpdated =  employeesDAO.deleteEmployeeRecordByID(id);
         if(rowsUpdated > 0){
-            System.out.println("Employee with ID " + id + "deleted successfully.");
+          LOGGER.info("Employee with ID " + id + "deleted successfully.");
         }else{
-            System.out.println("No employee found with ID" + id);
+            LOGGER.info("No employee found with ID" + id);
         }
         return rowsUpdated;
    }
@@ -46,9 +49,9 @@ public class UserInterface implements DAOInterface {
    public int insertEmployees(List <Employee> employeeList){
         int rowsUpdated = employeesDAO.insertEmployees(employeeList);
         if(rowsUpdated > 0){
-            System.out.println("Employees inserted successfully.");
+          LOGGER.info("Employees inserted successfully.");
         }else{
-            System.out.println("Failed to insert employees.");
+           LOGGER.info("Failed to insert employees.");
         }
 
         return rowsUpdated;
@@ -58,9 +61,9 @@ public class UserInterface implements DAOInterface {
         int rowsAffected =  employeesDAO.updateFirstNameById(id,newFirstName);
 
         if(rowsAffected > 0){
-            System.out.println("Employee with ID " + id + "'s first name updated to " + newFirstName + ".");
+         LOGGER.info("Employee with ID " + id + "'s first name updated to " + newFirstName + ".");
         }else{
-            System.out.println("No employee found with ID" + id);
+            LOGGER.info("No employee found with ID" + id);
         }
 
         return rowsAffected;
